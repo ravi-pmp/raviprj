@@ -1,0 +1,10 @@
+- include_tasks: prelim.yml
+
+- include_tasks: tasks/start/start.yml
+  when: operation|upper=="START"
+
+- include_tasks: tasks/stop/stop/stop.yml
+  when:  operation|upper=="STOP"
+
+- include_tasks: tasks/restart/restart.yml
+  when:  operation|upper=="RESTART"
