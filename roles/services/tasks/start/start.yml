@@ -1,5 +1,9 @@
 ---
 #first check the status of the service
+- debug:
+    var: service_name
+
+
 - include_tasks: tasks/common/fetch_status.yml
 
 - debug:

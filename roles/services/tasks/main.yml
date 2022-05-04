@@ -1,6 +1,6 @@
 - include_tasks: prelim.yml
 
-- include_tasks: tasks/start/start.yml
+- include_tasks: tasks/start/start_services.yml
   when: operation|upper=="START"
 
 - include_tasks: tasks/stop/stop/stop.yml
