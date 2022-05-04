@@ -26,15 +26,14 @@
  </head>
 
 <body>
- <div style="background-image: url(psa_banner.jpeg); height: 400px; width: 100%; border: 1px solid black;"></div>
+ <div style="background-image: url(security_bank_logo.png); height: 400px; width: 100%; border: 1px solid black;"></div>
   <!-- This is our left-hand menu and navigation bar.
   We will generate links for each host, breaking them up by job status.
   The color / style for failed and missing hosts can be tuned in playbook vars. -->
 
   <div class="sidenav">
-    <p><a style="text-align:center;font-weight:bold;font-size:medium" href="#summary">Summary</a></p>
-    <hr>
-    <p>Host Results</p>
+
+    <p>Host</p>
     {% for item in ansible_play_hosts_all  %}
     <a href="#{{ item }}">{{ item }}</a>
     {% endfor %}
@@ -63,7 +62,6 @@
     <br>
     <hr>
 
-
     <h1 id="report">ServiceManagement Status</h1>
     {% for host in ansible_play_hosts_all  %}
         <h2 id="{{ host }}">{{ host }}</h2>
@@ -74,14 +72,15 @@
                 <th>PreState</th>
                 <th>PostState</th>
               </tr>
-            {% for svc_entries in in hostvars[host]['overall_services_status'] %}
+            {% for svc_entries in hostvars[host]['overall_services_status'] %}
                 <tr>
-                  <td>svc_entries['service_name']</td>
-                  <td>svc_entries['installed']</td>
-                  <td>svc_entries['pre_state']</td>
-                   <td>svc_entries['post_state']</td>
+                  <td>{{ svc_entries['service_name'] }}</td>
+                  <td>{{ svc_entries['installed'] }}</td>
+                  <td>{{ svc_entries['pre_state'] }}</td>
+                   <td>{{ svc_entries['post_state'] }}</td>
                 </tr>
             {% endfor %}
+            </table>
         <hr>
     {% endfor %}
 

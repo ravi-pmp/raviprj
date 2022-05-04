@@ -21,7 +21,7 @@
 ### Set the UUID of the path and use that as destination
 - set_fact:
     current_report_folder: "{{ reports_root_folder }}/{{ report_date }}/{{ report_name }}"
-    zip_path: "{{ reports_root_folder }}/{{ report_date }}"
+    zip_path: "{{ reports_root_folder }}/{{ report_date }}/{{ report_name }}.zip"
 
 - name: "ReportGeneration: Creating the report folder {{ current_report_folder }}"
   file:
@@ -73,7 +73,7 @@
   run_once: yes
   shell:
     chdir: "{{ current_report_folder }}"
-    cmd: "zip -r --password {{ zip_passwd }} {{ zip_path }}/{{ uuid.uuid }}.zip * "
+    cmd: "zip -r --password {{ zip_passwd }} {{ zip_path }} * "
   no_log: yes
   when: secure_zip_folder
 
@@ -82,7 +82,7 @@
   community.general.archive:
     path:
       - "{{ current_report_folder }}/*"
-    dest: "{{ zip_path }}/{{ uuid.uuid }}.zip"
+    dest: "{{ zip_path }}"
     format: zip
   delegate_to: localhost
   run_once: yes
@@ -98,7 +98,7 @@
     subject: "{{ email_subject }}"
     body: "{{ email_body }}"
     to: "{{ to_email_id }}"
-    attach: "{{ zip_path }}/{{ uuid.uuid }}.zip"
+    attach: "{{ zip_path }}"
   delegate_to: localhost
   ignore_errors: yes
   run_once: yes
