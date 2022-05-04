@@ -8,17 +8,17 @@
 
 - block:
     - debug:
-        msg: "Service {{ service_name }} is already running on the server {{ inventory_hostname}}. Nothing will be done"
+        msg: "Service {{ service_name }} is already stopped on the server {{ inventory_hostname}}. Nothing will be done"
     - set_fact:
         overall_services_status: "{{ overall_services_status +
                   [{
                     'service_name': service_name,
                     'installed': 'true',
-                    'pre_state': 'running',
-                    'post_state':'running'
+                    'pre_state': 'stopped',
+                    'post_state':'stopped'
                   }]
         }}"
-  when: service_status=='Running'
+  when: service_status=='Stopped'
 
 - block:
     - debug:
@@ -37,9 +37,9 @@
 
 - block:
     - debug:
-        msg: "Starting the service {{ service_name }} on the server {{ inventory_hostname}}"
+        msg: "Stopping the service {{ service_name }} on the server {{ inventory_hostname}}"
 
-    - win_shell: Start-Service -Name {{ service_name }}
+    - win_shell: Stop-Service -Name {{ service_name }}
       register: svc_start
 
     - debug:
@@ -50,9 +50,9 @@
                      [ {
                         'service_name': service_name,
                         'installed': true,
-                        'pre_state': 'stopped',
-                        'post_state':'running'
+                        'pre_state': 'running',
+                        'post_state':'stopped'
                       }]
             }}"
 
-  when: not service_status=='NA' and service_status=='Stopped'
+  when: not service_status=='NA' and service_status=='Running'

@@ -12,8 +12,13 @@
     service_status: "NA"
 
 - block:
-    - win_shell: Get-Service {{ service_name }} | Select Status
-      register: service_status
+    - win_shell: Get-Service {{ service_name }} | Select Status -ExpandProperty Status
+      register: svc_status
+    - set_fact:
+        service_status: "{{ svc_status.stdout_lines[0] }}"
+
   rescue:
     - debug:
         msg: "Service {{ service_name }} is not present in the server {{ inventory_hostname }}. "
+    - set_fact:
+        service_status: "NA"
