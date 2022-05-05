@@ -6,5 +6,5 @@
 - include_tasks: tasks/stop/stop_services.yml
   when:  operation|upper=="STOP"
 
-- include_tasks: tasks/restart/restart.yml
+- include_tasks: tasks/restart/restart_services.yml
   when:  operation|upper=="RESTART"

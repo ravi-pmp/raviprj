@@ -8,14 +8,21 @@
 
 - block:
     - debug:
-        msg: "Service {{ service_name }} is already stopped on the server {{ inventory_hostname}}. Nothing will be done"
+        msg: "Service {{ service_name }} is already stopped on the server {{ inventory_hostname}}. Starting the service"
+
+    - win_shell: Start-Service -Name {{ service_name }}
+      register: svc_start
+
+    - debug:
+        var: svc_start
+
     - set_fact:
         overall_services_status: "{{ overall_services_status +
                   [{
                     'service_name': service_name,
                     'installed': 'true',
                     'pre_state': 'stopped',
-                    'post_state':'stopped'
+                    'post_state':'running'
                   }]
         }}"
   when: service_status=='Stopped'
@@ -37,7 +44,8 @@
 
 - block:
     - debug:
-        msg: "Stopping the service {{ service_name }} on the server {{ inventory_hostname}}"
+        msg: "The service {{ service_name }} on the server {{ inventory_hostname}} is in running state.
+        Stopping and startign the service."
 
     - win_shell: Stop-Service -Name {{ service_name }}
       register: svc_stop
@@ -45,14 +53,26 @@
     - debug:
        var: svc_stop
 
+    - debug:
+       msg: "The service {{ service_name }} on the server {{ inventory_hostname}} is stopped."
+
+    - win_shell: Start-Service -Name {{ service_name }}
+      register: svc_start
+
+    - debug:
+       var: svc_start
+
+    - debug:
+        msg: "The service {{ service_name }} on the server {{ inventory_hostname}} is started."
+
     - set_fact:
         overall_services_status: "{{ overall_services_status +
                      [ {
                         'service_name': service_name,
                         'installed': true,
                         'pre_state': 'running',
-                        'post_state':'stopped'
+                        'post_state':'running'
                       }]
             }}"
 
-  when: not service_status=='NA' and service_status=='Running'
+  when: service_status=='Running'
