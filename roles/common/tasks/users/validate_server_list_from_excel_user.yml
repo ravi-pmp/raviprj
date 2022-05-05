@@ -25,6 +25,10 @@
 - debug:
     var: all_records
 
+- fail:
+    msg: "There are no entries in the excel file {{ excel_file_name }}"
+  when: all_records|length<1
+
 #Consolidated server list from the excel sheet
 - set_fact:
     consolidated_server_list: []
@@ -39,9 +43,9 @@
 
 #remove duplicates
 - set_fact:
-    consolidated_server_list: "{{ consolidated_server_list | | unique }}"
+    consolidated_server_list: "{{ consolidated_server_list | unique }}"
 
 - debug:
     var: consolidated_server_list
 
--
+

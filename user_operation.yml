@@ -20,5 +20,5 @@
 
     - block:
         - debug:
-            msg: "Not performing operation as {{ inventory_hostname }} is not part of {{ server_list }}"
+            msg: "Not performing operation as {{ inventory_hostname }} is not part of {{ consolidated_server_list }}"
       when: not inventory_hostname in consolidated_server_list
