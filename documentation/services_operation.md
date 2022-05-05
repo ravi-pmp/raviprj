@@ -2,6 +2,7 @@
 ```shell
 ansible-playbook -i inventory  services_operation.yml -e \
 '{
+  "server_names": "192.168.176.2",
   "operation":"start",
   "services": 
   [
@@ -15,6 +16,7 @@ ansible-playbook -i inventory  services_operation.yml -e \
 ```shell
 ansible-playbook -i inventory  services_operation.yml -e \
 '{
+"server_names": "192.168.176.2",
   "operation":"stop",
   "services": 
   [
@@ -28,6 +30,7 @@ ansible-playbook -i inventory  services_operation.yml -e \
 ```shell
 ansible-playbook -i inventory  services_operation.yml -e \
 '{
+"server_names": "192.168.176.2",
   "operation":"restart",
   "services": 
   [

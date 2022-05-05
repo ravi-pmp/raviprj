@@ -1,0 +1,2 @@
+---
+- include_tasks: validate_create_server_list.yml
