@@ -45,7 +45,7 @@
 - block:
     - debug:
         msg: "The service {{ service_name }} on the server {{ inventory_hostname}} is in running state.
-        Stopping and startign the service."
+        Stopping and starting the service."
 
     - win_shell: Stop-Service -Name {{ service_name }}
       register: svc_stop
