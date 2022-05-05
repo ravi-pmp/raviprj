@@ -1,0 +1,21 @@
+---
+#Tasks to validate the excel file
+- fail:
+    msg: "Either the excel_file_path field is empty or not defined"
+  when: excel_file_path is not defined or excel_file_path|trim==''
+
+
+- set_fact:
+    all_records: "{{ excel_file_path | get_all_user_records() }}"
+
+- debug:
+    var: all_records
+
+- include_tasks: validate_user_records.yml
+  args:
+    apply:
+      run_once: True
+  loop: "{{ all_records }}"
+  loop_control:
+    loop_var: user_record
+

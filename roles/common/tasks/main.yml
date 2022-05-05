@@ -1,2 +1,14 @@
 ---
+- fail:
+    msg: "Config type is either not defined or is empty."
+  when: config_type is not defined or config_type|trim==''
+
+- fail:
+    msg: "Invalid config type {{ config_type }} provided. Valid config types are {{ supported_config_types }}"
+  when: config_type|upper not in supported_config_types
+
 - include_tasks: validate_create_server_list.yml
+  when: config_type|upper=='SERVICES'
+
+- include_tasks: tasks/users/validate_server_list_from_excel_user.yml
+  when: config_type|upper=='USERS'

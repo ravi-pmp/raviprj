@@ -1,0 +1,34 @@
+---
+
+- debug:
+   msg: "validating the user record record {{ user_record }}"
+
+#Validate operation type
+- fail:
+    msg: "Invalid operation type {{ user_record[user_header.operation] }} provided. Valid operations are  {{ valid_operations_on_users }}"
+  when: user_record[user_header.operation]|trim|upper not in valid_operations_on_users
+
+
+#Validate the values of the column CanUserChangeThePassword column
+- fail:
+    msg: "Invalid value  {{ user_record[user_header.operation] }} provided for the column CanUserChangeThePassword. Valid values are  {{ valid_values_user_changing_passwd }}"
+  when: user_record[user_header.can_user_change_password]|trim|upper not in valid_values_user_changing_passwd
+
+#Validate the password required value
+- fail:
+    msg: "Invalid value  {{ user_record[user_header.password_required] }} provided for the column PasswordRequired. Valid values are  {{ valid_passwd_required_values }}"
+  when: user_record[user_header.password_required]|trim|upper not in valid_passwd_required_values
+
+- fail:
+    msg: "UserName field cannot be empty"
+  when: user_record[user_header.user_name]|trim==''
+
+- fail:
+    msg: "FullName field cannot be empty"
+  when: user_record[user_header.full_name]|trim==''
+
+#Check the password field. if PasswordRequired is YES or TRUE, then the Password field must not be empty
+- fail:
+    msg: "Password field cannot be empty as Password required is either set to yes/true"
+  when: user_record[user_header.password_required]|trim|upper in valid_yes_values and user_record[user_header.password]|trim==''
+

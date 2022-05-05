@@ -2,7 +2,7 @@
 ```shell
 ansible-playbook -i inventory  services_operation.yml -e \
 '{
-  "server_names": "192.168.176.2",
+  "server_names": "192.168.176.2,1.1.1.1",
   "operation":"start",
   "services": 
   [

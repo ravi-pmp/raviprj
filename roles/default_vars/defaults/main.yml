@@ -1,0 +1,5 @@
+---
+supported_config_types: ["SERVICES",
+                         "USERS",
+                         ]
+
