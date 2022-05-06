@@ -7,7 +7,7 @@
   tasks:
     - block:
         - include_role:
-           name: users
+           name: user
 
         - include_role:
            name: report

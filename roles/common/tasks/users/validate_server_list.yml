@@ -1,25 +1,29 @@
 ---
-- fail:
-    msg: "Servers column name must not be empty."
-  when: user_record['servers']|trim==''
+#The validation needs to be done only once for all the servers. Hence running it once
+- block:
+    - fail:
+        msg: "Servers column name must not be empty."
+      when: user_record['servers']|trim==''
 
-- set_fact:
-    server_list: "{{ (user_record['servers']|trim).split(',') }} "
+    - set_fact:
+        server_list: "{{ (user_record['servers']|trim).split(',') }} "
 
-- set_fact:
-    consolidated_server_list: "{{ consolidated_server_list + [server_list] }}"
+    - set_fact:
+        consolidated_server_list: "{{ consolidated_server_list + server_list }}"
 
-- debug:
-    msg: "Server list provided by the {{ user_record }} is {{ server_list }}"
+    - debug:
+        msg: "Server list provided by the {{ user_record }} is {{ server_list }}"
 
-- set_fact:
-    invalid_server_list: []
+    - set_fact:
+        invalid_server_list: []
 
-- set_fact:
-    invalid_server_list: "{{ invalid_server_list }} + [ '{{ item }}' ]"
-  when: item not in ansible_play_hosts
-  with_items: "{{ server_list }}"
+    - set_fact:
+        invalid_server_list: "{{ invalid_server_list }} + [ '{{ item }}' ]"
+      when: item not in ansible_play_hosts
+      with_items: "{{ server_list }}"
 
-- fail:
-    msg: "Provided server hostnames {{ invalid_server_list }} are not part of inventory . Aborting the  operation"
-  when: invalid_server_list|length > 0
+    - fail:
+        msg: "Provided server hostnames {{ invalid_server_list }} are not part of inventory . Aborting the  operation"
+      when: invalid_server_list|length > 0
+  run_once: true
+  delegate_to: localhosts
