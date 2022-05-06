@@ -33,7 +33,7 @@
 - set_fact:
     consolidated_server_list: []
 
-- include_tasks: validate_server_list.yml
+- include_tasks: tasks/users/validate_server_list.yml
   args:
     apply:
       run_once: True
