@@ -7,8 +7,6 @@
          name: "{{ user_info[user_header.user_name]|trim }}"
          state: "query"
          register: user_details
-       ignore_errors: true
-       ignore_unreachable: true
 
      - debug:
            var: user_details
@@ -17,12 +15,6 @@
       - debug:
          msg: "Unable to query the user"
 
-  always:
-      #Keeping track of the hosts which are reachable and which are not reachable, so that we can populate
-      #the information in the report
-      - add_host:
-            name: "inventory_hostname"
-            group: reachable_hosts
 
 
 #TODO: Verify if the user is not present,if the user is not present then only do the creation.
@@ -35,13 +27,14 @@
         name: "{{ user_info[user_header.user_name]|trim }}"
         fullname: "{{ user_info[user_header.full_name]|trim }}"
         description: "{{ user_info[user_header.description]|trim }}"
-        user_cannot_change_password: "{{ can_user_change_pwd_dict[user_info[user_header.can_user_change_password]|trim] }}"
+        user_cannot_change_password: "{{ can_user_change_pwd_dict[user_info[user_header.can_user_change_password]|trim|upper] }}"
         password_never_expires: "yes"
         password: "{{ user_info[user_header.password]|trim }}"
         state: "present"
       register: user_creation_result
-      ignore_errors: true
-      ignore_unreachable: true
+
+    - debug:
+        var: user_creation_result
 
     - set_fact:
           consolidated_operation_result: "{{ consolidated_operation_result +
@@ -82,12 +75,13 @@
           name: "{{ user_info[user_header.user_name]|trim }}"
           fullname: "{{ user_info[user_header.full_name]|trim }}"
           description: "{{ user_info[user_header.description]|trim }}"
-          user_cannot_change_password: "{{ can_user_change_pwd_dict[user_info[user_header.can_user_change_password]|trim] }}"
+          user_cannot_change_password: "{{ can_user_change_pwd_dict[user_info[user_header.can_user_change_password]|trim|upper] }}"
           password_expired: "yes"
           state: "present"
       register: user_creation_result
-      ignore_errors: true
-      ignore_unreachable: true
+
+    - debug:
+          var: user_creation_result
 
     - set_fact:
           consolidated_operation_result: "{{ consolidated_operation_result +

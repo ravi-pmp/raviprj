@@ -7,8 +7,6 @@
          name: "{{ user_info[user_header.user_name]|trim }}"
          state: "query"
          register: user_details
-       ignore_errors: true
-       ignore_unreachable: true
 
      - debug:
            var: user_details
@@ -16,13 +14,6 @@
   rescue:
       - debug:
          msg: "Unable to query the user"
-
-  always:
-      #Keeping track of the hosts which are reachable and which are not reachable, so that we can populate
-      #the information in the report
-      - add_host:
-            name: "inventory_hostname"
-            group: reachable_hosts
 
 
 #TODO: Verify if the user is not present,if the user is not present then only do the creation.
@@ -32,9 +23,10 @@
     - win_user:
         name: "{{ user_info[user_header.user_name]|trim }}"
         state: "absent"
-      register: user_creation_result
-      ignore_errors: true
-      ignore_unreachable: true
+      register: user_removal_result
+
+    - debug:
+       var: user_removal_result
 
     - set_fact:
           consolidated_operation_result: "{{ consolidated_operation_result +
