@@ -20,3 +20,6 @@
   loop: "{{ all_records }}"
   loop_control:
     loop_var: user_info
+
+- debug:
+    var: consolidated_operation_result
