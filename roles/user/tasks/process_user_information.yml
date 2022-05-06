@@ -5,3 +5,6 @@
 
 - include_tasks: create_user.yml
   when: user_info[user_header.operation]|trim|upper=='CREATE'
+
+- include_tasks: remove_user.yml
+  when: user_info[user_header.operation]|trim|upper=='REMOVE'

@@ -1,0 +1,21 @@
+---
+- debug:
+    msg: "Removing the user from the server {{ inventory_hostname }} with details {{ user_info }}"
+
+#query if the user is already present
+- win_user:
+    name: "{{ user_info[user_header.user_name]|trim }}"
+    state: "query"
+    register: user_details
+
+- debug:
+   var: user_details
+
+#TODO: Verify if the user is present, then only go for delete operation
+
+#If the password is given, then we will set password never expires
+- win_user:
+    name: "{{ user_info[user_header.user_name]|trim }}"
+    state: "absent"
+
+

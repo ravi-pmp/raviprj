@@ -11,6 +11,8 @@
 - debug:
    var: user_details
 
+#TODO: Verify if the user is not present,if the user is not present then only do the creation.
+
 
 #If the password is given, then we will set password never expires
 - win_user:
