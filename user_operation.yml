@@ -9,12 +9,12 @@
         - include_role:
            name: user
 
-        - include_role:
-           name: report
-          vars:
-            title: "UserManagement"
-            report_name: "user_report"
-            report_template_name: "user_report.j2"
+        #- include_role:
+         #  name: report
+          #vars:
+           # title: "UserManagement"
+            #report_name: "user_report"
+            #report_template_name: "user_report.j2"
 
       when: inventory_hostname in consolidated_server_list
 
