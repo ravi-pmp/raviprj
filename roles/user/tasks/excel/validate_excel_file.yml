@@ -1,13 +1,6 @@
 ---
-#Tasks to validate the excel file
-- fail:
-    msg: "Either the excel_file_path field is empty or not defined"
-  when: excel_file_path is not defined or excel_file_path|trim==''
 
-
-- set_fact:
-    all_records: "{{ excel_file_path | get_all_user_records() }}"
-
+#all records is already populated when calling common role
 - debug:
     var: all_records
 
