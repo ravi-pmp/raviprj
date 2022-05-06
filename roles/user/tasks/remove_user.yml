@@ -2,20 +2,68 @@
 - debug:
     msg: "Removing the user from the server {{ inventory_hostname }} with details {{ user_info }}"
 
-#query if the user is already present
-- win_user:
-    name: "{{ user_info[user_header.user_name]|trim }}"
-    state: "query"
-    register: user_details
+- block:
+     - win_user:
+         name: "{{ user_info[user_header.user_name]|trim }}"
+         state: "query"
+         register: user_details
+       ignore_errors: true
+       ignore_unreachable: true
 
-- debug:
-   var: user_details
+     - debug:
+           var: user_details
 
-#TODO: Verify if the user is present, then only go for delete operation
+  rescue:
+      - debug:
+         msg: "Unable to query the user"
 
-#If the password is given, then we will set password never expires
-- win_user:
-    name: "{{ user_info[user_header.user_name]|trim }}"
-    state: "absent"
+  always:
+      #Keeping track of the hosts which are reachable and which are not reachable, so that we can populate
+      #the information in the report
+      - add_host:
+            name: "inventory_hostname"
+            group: reachable_hosts
+
+
+#TODO: Verify if the user is not present,if the user is not present then only do the creation.
+
+- block:
+
+    - win_user:
+        name: "{{ user_info[user_header.user_name]|trim }}"
+        state: "absent"
+      register: user_creation_result
+      ignore_errors: true
+      ignore_unreachable: true
+
+    - set_fact:
+          consolidated_operation_result: "{{ consolidated_operation_result +
+                       [
+                          user_info |
+                          combine(
+                               {
+                                   'status':'success'
+                               }
+                           )
+                       ]
+                       }}"
+  rescue:
+      - debug:
+          msg: "Removal operation failed for the user details {{ user_info }}"
+      #ansible_failed_result can capture the result of the failure
+      - set_fact:
+            consolidated_operation_result: "{{ consolidated_operation_result +
+                   [
+                      user_info |
+                      combine(
+                           {
+                               'status':'fail',
+                               'remarks': ansible_failed_result
+                           }
+                       )
+                   ]
+                   }}"
+
+
 
 

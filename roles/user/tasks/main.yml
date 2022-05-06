@@ -2,6 +2,9 @@
 #Since the role will be called for each of the hosts present in the consolidated_server_list, so we need to
 #make sure we process only those records for the current inventory
 
+- set_fact:
+    consolidated_operation_result: []
+
 - include_tasks: process_user_information.yml
   when: inventory_hostname in user_info['servers']
   loop: "{{ all_records }}"
