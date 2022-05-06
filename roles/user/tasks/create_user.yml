@@ -1,0 +1,36 @@
+---
+- debug:
+    msg: "Creating the user in the server {{ inventory_hostname }} with details {{ user_info }}"
+
+#query if the user is already present
+- win_user:
+    name: "{{ user_info[user_header.user_name]|trim }}"
+    state: "query"
+    register: user_details
+
+- debug:
+   var: user_details
+
+
+#If the password is given, then we will set password never expires
+- win_user:
+    name: "{{ user_info[user_header.user_name]|trim }}"
+    fullname: "{{ user_info[user_header.full_name]|trim }}"
+    description: "{{ user_info[user_header.description]|trim }}"
+    user_cannot_change_password: "{{ can_user_change_pwd_dict[user_info[user_header.can_user_change_password]|trim] }}"
+    password_never_expires: "yes"
+    password: "{{ user_info[user_header.password]|trim }}"
+    state: "present"
+  when: not user_info[user_header.password]|trim==''
+
+# The password will be set to expired if empty password is given, so that user can change it
+- win_user:
+    name: "{{ user_info[user_header.user_name]|trim }}"
+    fullname: "{{ user_info[user_header.full_name]|trim }}"
+    description: "{{ user_info[user_header.description]|trim }}"
+    user_cannot_change_password: "{{ can_user_change_pwd_dict[user_info[user_header.can_user_change_password]|trim] }}"
+    password_expired: "yes"
+    state: "present"
+  when: user_info[user_header.password]|trim==''
+
+

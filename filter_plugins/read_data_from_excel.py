@@ -62,12 +62,10 @@ class FilterModule(object):
                 entry['user_name'] = row[0]
                 entry['full_name'] = row[1]
                 entry['description'] = row[2]
-                entry['password_required'] = row[3]
-                entry['password'] = row[4]
-                entry['account_expiry'] = row[5]
-                entry['can_user_change_password'] = row[6]
-                entry['operation'] = row[7]
-                entry['servers']=row[8]
+                entry['password'] = row[3]
+                entry['can_user_change_password'] = row[4]
+                entry['operation'] = row[5]
+                entry['servers']=row[6]
                 rows.append(entry)
 
         except Exception as e:

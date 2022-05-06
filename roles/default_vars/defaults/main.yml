@@ -21,17 +21,17 @@ user_header: {
 }
 
 can_user_change_pwd_dict: {
-    "YES": True,
-    "NO": False,
-    "TRUE": True,
-    "FALSE": False
+    "YES": "yes",
+    "NO": "no",
+    "TRUE": "yes",
+    "FALSE": "no"
 }
 
 valid_pwd_dict: {
-  "YES": True,
-  "NO": False,
-  "TRUE": True,
-  "FALSE": False
+  "YES": "yes",
+  "NO": "no",
+  "TRUE": "yes",
+  "FALSE": "no"
 }
 
 

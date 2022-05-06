@@ -3,3 +3,5 @@
 - debug:
     msg: "Processing the record {{ user_info }}"
 
+- include_tasks: create_user.yml
+  when: user_info[user_header.operation]|trim|upper=='CREATE'
