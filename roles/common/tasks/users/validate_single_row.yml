@@ -1,7 +1,31 @@
 ---
 
+- fail:
+    msg: "Servers column name must not be empty."
+  when: user_record['servers']|trim==''
+
+- set_fact:
+    server_list: "{{ (user_record['servers']|trim).split(',') }} "
+
+- set_fact:
+    consolidated_server_list: "{{ consolidated_server_list + server_list }}"
+
 - debug:
-   msg: "validating the user record record {{ user_record }}"
+    msg: "Server list provided by the {{ user_record }} is {{ server_list }}"
+
+- set_fact:
+    invalid_server_list: []
+
+- set_fact:
+    invalid_server_list: "{{ invalid_server_list }} + [ '{{ item }}' ]"
+  when: item not in ansible_play_hosts
+  with_items: "{{ server_list }}"
+
+- fail:
+    msg: "Provided server hostnames {{ invalid_server_list }} are not part of inventory . Aborting the  operation"
+  when: invalid_server_list|length > 0
+
+# Now validate the other information w.r.t user
 
 #Validate operation type
 - fail:
@@ -31,4 +55,3 @@
 - fail:
     msg: "Password field cannot be empty as Password required is either set to yes/true"
   when: user_record[user_header.password_required]|trim|upper in valid_yes_values and user_record[user_header.password]|trim==''
-
