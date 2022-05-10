@@ -1,8 +1,10 @@
 [win]
-192.168.176.2
+192.168.4.92
 
 [win:vars]
-ansible_user=som
-ansible_password=qhtp-9167@123
+ansible_user='win2k0nodns\raviad1'
+ansible_password=P@ssw0rd
 ansible_connection=winrm
-ansible_winrm_server_cert_validation=ignore
+#ansible_winrm_transport=basic
+#ansible_winrm_server_cert_validation=ignore
+#ansible_port = 5985
